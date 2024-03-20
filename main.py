@@ -1,6 +1,7 @@
 # create a small program to pull a random wikipedia article from a specific topic
 
 import requests
+import webbrowser
 
 def get_random_wikipedia_article():
     endpoint = "https://en.wikipedia.org/w/api.php"
@@ -18,6 +19,9 @@ def get_random_wikipedia_article():
     random_article_title = data["query"]["random"][0]["title"]
     random_article_url = f"https://en.wikipedia.org/wiki/{random_article_title.replace(' ', '_')}"
 
+    # open the article in the default web browser
+    webbrowser.open(random_article_url)
+    
     return random_article_title, random_article_url
 
 title, url = get_random_wikipedia_article()
