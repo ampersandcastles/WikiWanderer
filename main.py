@@ -1,28 +1,19 @@
 # create a small program to pull a random wikipedia article from a specific topic
 
 import requests
-import webbrowser
 
-def get_random_wikipedia_article():
+def fetch_categories(prefix, limit=10):
     endpoint = "https://en.wikipedia.org/w/api.php"
     parameters = {
         "action": "query",
+        "list": "allcategories",
+        "acprefix": prefix, # the prefix to search for
         "format": "json",
-        "list": "random",
-        "rnnamespace": 0, # 0 is the main namespace
-        "rnlimit": 1 # how many random articles to pull
+        "aclimit": limit # how many categories to pull
     }
 
-    response = requests.get(url=endpoint, params=parameters)
+    response = requests.get(endpoint, params=parameters)
     data = response.json()
 
-    random_article_title = data["query"]["random"][0]["title"]
-    random_article_url = f"https://en.wikipedia.org/wiki/{random_article_title.replace(' ', '_')}"
-
-    # open the article in the default web browser
-    webbrowser.open(random_article_url)
-    
-    return random_article_title, random_article_url
-
-title, url = get_random_wikipedia_article()
-print(f"Random Wikipedia article: {title}\nURL: {url}")
+    categories = [category["*"] for category in data["query"]["allcategories"]]
+    return categories
